@@ -254,15 +254,18 @@ async function insertWithColumnCompatibility(
 
     if (!missingColumn || !(missingColumn in mutablePayload)) {
       throwIfSupabaseError(error);
+      throw new Error(error?.message ?? `Could not insert into ${table}.`);
     }
 
-    if (requiredColumns.has(missingColumn)) {
+    const confirmedMissingColumn = missingColumn;
+
+    if (requiredColumns.has(confirmedMissingColumn)) {
       throw new Error(
-        `Your Supabase schema is missing the \`${missingColumn}\` column. Run the latest schema update before saving this project.`,
+        `Your Supabase schema is missing the \`${confirmedMissingColumn}\` column. Run the latest schema update before saving this project.`,
       );
     }
 
-    delete mutablePayload[missingColumn];
+    delete mutablePayload[confirmedMissingColumn];
   }
 
   throw new Error(`Could not insert into ${table}.`);
@@ -297,15 +300,18 @@ async function updateWithColumnCompatibility(
 
     if (!missingColumn || !(missingColumn in mutablePayload)) {
       throwIfSupabaseError(error);
+      throw new Error(error?.message ?? `Could not update ${table}.`);
     }
 
-    if (requiredColumns.has(missingColumn)) {
+    const confirmedMissingColumn = missingColumn;
+
+    if (requiredColumns.has(confirmedMissingColumn)) {
       throw new Error(
-        `Your Supabase schema is missing the \`${missingColumn}\` column. Run the latest schema update before saving this project.`,
+        `Your Supabase schema is missing the \`${confirmedMissingColumn}\` column. Run the latest schema update before saving this project.`,
       );
     }
 
-    delete mutablePayload[missingColumn];
+    delete mutablePayload[confirmedMissingColumn];
   }
 
   throw new Error(`Could not update ${table}.`);
