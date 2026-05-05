@@ -557,9 +557,12 @@ function mapProjectRows(
         : overdueInvoiceEntriesCount - paymentsReceivedCount,
       0,
     );
-    const paymentStructure = paymentStructures.includes(project.payment_structure)
-      ? project.payment_structure
-      : "Paid in full";
+    const paymentStructureCandidate = project.payment_structure;
+    const paymentStructure: PaymentStructure =
+      paymentStructureCandidate &&
+      paymentStructures.includes(paymentStructureCandidate)
+        ? paymentStructureCandidate
+        : "Paid in full";
 
     return {
       attentionPriority: project.attention_priority ?? "Normal",
